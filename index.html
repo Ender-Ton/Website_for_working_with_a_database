@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Просмотр данных из Excel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page">
+    <header class="header">
+        <h1 class="header__title">Загрузка выгрузок</h1>
+        <p class="header__subtitle">
+            Пожалуйста, загрузите три Excel-файла: <strong>Выгрузка 1</strong>, <strong>Выгрузка 2</strong> и <strong>Выгрузка 3</strong>.
+        </p>
+    </header>
+
+    <main class="main">
+        <!-- Блок загрузки файлов -->
+        <section class="card" id="upload-card">
+            <h2 class="card__title">Загрузите файлы</h2>
+            <form id="upload-form" class="form">
+                <div class="form__group">
+                    <label for="file1" class="form__label">Выгрузка 1 (Excel)</label>
+                    <input
+                            type="file"
+                            id="file1"
+                            name="file1"
+                            class="form__input"
+                            accept=".xlsx,.xls,.csv"
+                            required
+                    >
+                </div>
+
+                <div class="form__group">
+                    <label for="file2" class="form__label">Выгрузка 2 (Excel)</label>
+                    <input
+                            type="file"
+                            id="file2"
+                            name="file2"
+                            class="form__input"
+                            accept=".xlsx,.xls,.csv"
+                            required
+                    >
+                </div>
+
+                <div class="form__group">
+                    <label for="file3" class="form__label">Выгрузка 3 (Excel)</label>
+                    <input
+                            type="file"
+                            id="file3"
+                            name="file3"
+                            class="form__input"
+                            accept=".xlsx,.xls,.csv"
+                            required
+                    >
+                </div>
+
+                <button type="submit" id="submit-btn" class="button" disabled>
+                    Продолжить
+                </button>
+
+                <p id="status-text" class="form__status">
+                    Загрузите все три файла, чтобы перейти к просмотру данных.
+                </p>
+            </form>
+        </section>
+
+        <!-- Пространство визуального отчёта (во всю ширину) -->
+        <section class="workspace workspace--hidden" id="workspace">
+            <header class="workspace__header">
+                <h2 class="workspace__title">Визуальный отчёт по выгрузкам</h2>
+                <p class="workspace__subtitle">
+                    Здесь будут отображаться агрегированные данные из загруженных файлов.
+                </p>
+            </header>
+
+            <!-- Сетка блоков: 1-я выгрузка сверху на всю ширину, 2 и 3 ниже -->
+            <div class="workspace__grid">
+                <!-- 1 ВЫГРУЗКА (верхний большой блок) -->
+                <div class="report-block report-block--primary">
+                    <div class="report-block__header">
+                        <h3 class="report-block__title">1 выгрузка</h3>
+                        <span class="report-block__hint">
+                                Заполняемость слотов
+                            </span>
+                    </div>
+
+                    <!-- Фильтры относятся только к 1-й выгрузке -->
+                    <div class="report-block__filters">
+                        <div class="filter">
+                            <label class="filter__label" for="filter-city">Город</label>
+                            <select id="filter-city" class="filter__control">
+                                <option value="Волгоград">Волгоград</option>
+                                <option value="Воронеж">Воронеж</option>
+                                <option value="Екатеринбург">Екатеринбург</option>
+                                <option value="Казань">Казань</option>
+                                <option value="Краснодар">Краснодар</option>
+                                <option value="Красноярск">Красноярск</option>
+                                <option value="Нижний Новгород">Нижний Новгород</option>
+                                <option value="Новосибирск">Новосибирск</option>
+                                <option value="Омск">Омск</option>
+                                <option value="Пермь">Пермь</option>
+                                <option value="Самара">Самара</option>
+                                <option value="Санкт-Петербург">Санкт-Петербург</option>
+                                <option value="Тюмень">Тюмень</option>
+                                <option value="Уфа">Уфа</option>
+                                <option value="Челябинск">Челябинск</option>
+                                <option value="Остальные города">Остальные города</option>
+                            </select>
+                        </div>
+                        <div class="filter">
+                            <label class="filter__label" for="filter-role">Роль</label>
+                            <select id="filter-role" class="filter__control">
+                                <option>Все роли</option>
+                                <option>ЭПЗ</option>
+                                <option>ВК</option>
+                                <option>БД</option>
+                            </select>
+                        </div>
+                        <div class="filter">
+                            <label class="filter__label" for="filter-date">Дата</label>
+                            <input id="filter-date" type="date" class="filter__control">
+                        </div>
+                        <div class="filter">
+                            <label class="filter__label" for="filter-training-shop">
+                                Магазин обучения
+                            </label>
+                            <select id="filter-training-shop" class="filter__control">
+                                <option>Все магазины обучения</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="report-block__body">
+                        <table class="report-table report-table--wide">
+                            <thead>
+                            <tr>
+                                <th class="report-table__th report-table__th--row">Магазин</th>
+                                <th class="report-table__th">Магазин обучения</th>
+                                <th class="report-table__th">День</th>
+                                <th class="report-table__th">Оформлено</th>
+                                <th class="report-table__th">7–8</th>
+                                <th class="report-table__th">9–10</th>
+                                <th class="report-table__th">11–12</th>
+                                <th class="report-table__th">13–14</th>
+                                <th class="report-table__th">15–16</th>
+                                <th class="report-table__th">17–18</th>
+                                <th class="report-table__th">19–20</th>
+                                <th class="report-table__th">21–22</th>
+                            </tr>
+                            </thead>
+                            <tbody id="report1-body"></tbody>
+                        </table>
+                        <div class="report-block__footer">
+                            <button class="link-button js-refresh" type="button" data-export="1">
+                                Обновить данные
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2 ВЫГРУЗКА (нижний левый блок) -->
+                <div class="report-block report-block--secondary-1">
+                    <div class="report-block__header">
+                        <h3 class="report-block__title">2 выгрузка</h3>
+                        <span class="report-block__hint">
+                                План найма
+                            </span>
+                    </div>
+
+                    <div class="report-block__spacer"></div>
+
+                    <div class="report-block__body">
+                        <table class="report-table">
+                            <thead>
+                            <tr>
+                                <th class="report-table__th">Город</th>
+                                <th class="report-table__th">ЭПЗ</th>
+                                <th class="report-table__th">Выходы</th>
+                                <th class="report-table__th">ВК</th>
+                                <th class="report-table__th">Выходы</th>
+                                <th class="report-table__th">БД</th>
+                                <th class="report-table__th">Выходы</th>
+                            </tr>
+                            </thead>
+                            <tbody id="report2-body"></tbody>
+                        </table>
+                        <div class="report-block__footer">
+                            <button class="link-button js-refresh" type="button" data-export="2">
+                                Обновить данные
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3 ВЫГРУЗКА (нижний правый блок) -->
+                <div class="report-block report-block--secondary-2">
+                    <div class="report-block__header">
+                        <h3 class="report-block__title">3 выгрузка</h3>
+                        <span class="report-block__hint">
+                                полезная заполняемость, %
+                            </span>
+                    </div>
+
+                    <!-- Фильтры для 3-й выгрузки -->
+                    <div class="report-block__filters">
+                        <div class="filter">
+                            <label class="filter__label" for="filter3-city">Город</label>
+                            <select id="filter3-city" class="filter__control">
+                                <option value="Волгоград">Волгоград</option>
+                                <option value="Воронеж">Воронеж</option>
+                                <option value="Екатеринбург">Екатеринбург</option>
+                                <option value="Казань">Казань</option>
+                                <option value="Краснодар">Краснодар</option>
+                                <option value="Красноярск">Красноярск</option>
+                                <option value="Нижний Новгород">Нижний Новгород</option>
+                                <option value="Новосибирск">Новосибирск</option>
+                                <option value="Омск">Омск</option>
+                                <option value="Пермь">Пермь</option>
+                                <option value="Самара">Самара</option>
+                                <option value="Санкт-Петербург">Санкт-Петербург</option>
+                                <option value="Тюмень">Тюмень</option>
+                                <option value="Уфа">Уфа</option>
+                                <option value="Челябинск">Челябинск</option>
+                                <option value="Остальные города">Остальные города</option>
+                            </select>
+                        </div>
+                        <div class="filter">
+                            <label class="filter__label" for="filter3-role">Роль</label>
+                            <select id="filter3-role" class="filter__control">
+                                <option>Все роли</option>
+                                <option>ЭПЗ</option>
+                                <option>ВК</option>
+                                <option>БД</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="report-block__body">
+                        <table id="report3-table" class="report-table report-table--compact">
+                            <thead>
+                            <tr>
+                                <th class="report-table__th">Город</th>
+                                <th class="report-table__th">Роль</th>
+                                <th class="report-table__th report-table__th--grand-total">Grand Total</th>
+                                <th class="report-table__th report-table__th--slot" data-slot-index="0">7–8</th>
+                                <th class="report-table__th report-table__th--slot" data-slot-index="1">9–10</th>
+                                <th class="report-table__th report-table__th--slot" data-slot-index="2">11–12</th>
+                                <th class="report-table__th report-table__th--slot" data-slot-index="3">13–14</th>
+                                <th class="report-table__th report-table__th--slot" data-slot-index="4">15–16</th>
+                                <th class="report-table__th report-table__th--slot" data-slot-index="5">17–18</th>
+                                <th class="report-table__th report-table__th--slot" data-slot-index="6">19–20</th>
+                            </tr>
+                            </thead>
+                            <tbody id="report3-body"></tbody>
+                        </table>
+                        <div class="report-block__footer">
+                            <button class="link-button js-refresh" type="button" data-export="3">
+                                Обновить данные
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Скрытые инпуты для "Обновить данные" -->
+<input type="file" id="refresh-file1" accept=".xlsx,.xls,.csv" style="display:none">
+<input type="file" id="refresh-file2" accept=".xlsx,.xls,.csv" style="display:none">
+<input type="file" id="refresh-file3" accept=".xlsx,.xls,.csv" style="display:none">
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

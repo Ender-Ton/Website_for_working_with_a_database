@@ -1,0 +1,360 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #f4f5f7;
+  color: #1e1e24;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* Страница по ширине окна */
+.page {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 24px 0 40px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 0 16px;
+}
+
+.header__title {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.header__subtitle {
+  font-size: 14px;
+  color: #3a3a46;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* CARD (загрузка файлов) */
+
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px 20px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.card--hidden {
+  display: none;
+}
+
+.card__title {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form__label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form__input {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #d0d4dc;
+  background-color: #fafbfc;
+  font-size: 14px;
+}
+
+.form__input:focus {
+  outline: none;
+  border-color: #4c6fff;
+  box-shadow: 0 0 0 2px rgba(76, 111, 255, 0.2);
+}
+
+.button {
+  margin-top: 4px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #4c6fff;
+  color: #ffffff;
+  transition: background-color 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease;
+}
+
+.button:disabled {
+  background-color: #b3c0ff;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.button:not(:disabled):hover {
+  background-color: #3c57d4;
+  box-shadow: 0 4px 10px rgba(60, 87, 212, 0.35);
+}
+
+.button:not(:disabled):active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(60, 87, 212, 0.25);
+}
+
+.form__status {
+  font-size: 13px;
+  color: #55596a;
+  margin-top: 4px;
+}
+
+/* WORKSPACE: во всю ширину экрана */
+
+.workspace {
+  background-color: #ffffff;
+  border-radius: 0;
+  padding: 20px 16px 24px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  margin: 0;
+}
+
+.workspace--hidden {
+  display: none;
+}
+
+.workspace__header {
+  margin-bottom: 16px;
+}
+
+.workspace__title {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.workspace__subtitle {
+  font-size: 13px;
+  color: #55596a;
+}
+
+/* Фильтры — 1-я и 3-я выгрузка */
+
+.report-block__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 8px 0 12px;
+  min-height: 64px;
+}
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 160px;
+}
+
+.filter__label {
+  font-size: 13px;
+  color: #3a3a46;
+}
+
+.filter__control {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #d0d4dc;
+  background-color: #fafbfc;
+  font-size: 14px;
+}
+
+/* Сетка отчётов */
+.workspace__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr);
+  grid-template-rows: auto auto;
+  grid-template-areas:
+        "primary primary"
+        "secondary1 secondary2";
+  gap: 16px;
+  overflow-x: auto;
+}
+
+.report-block--primary {
+  grid-area: primary;
+}
+
+.report-block--secondary-1 {
+  grid-area: secondary1;
+}
+
+.report-block--secondary-2 {
+  grid-area: secondary2;
+}
+
+.report-block {
+  border-radius: 10px;
+  border: 1px solid #e0e4ec;
+  background-color: #fbfcff;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.report-block__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.report-block__title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.report-block__hint {
+  font-size: 11px;
+  color: #777b8c;
+}
+
+.report-block__spacer {
+  min-height: 64px;
+  margin: 8px 0 12px;
+}
+
+.report-block__body {
+  overflow-x: auto;
+}
+
+.report-block__footer {
+  margin-top: 8px;
+  text-align: left;
+}
+
+/* Таблицы */
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  table-layout: fixed;
+}
+
+.report-table--wide {
+  min-width: 900px;
+}
+
+.report-table--wide th:nth-child(1),
+.report-table--wide td:nth-child(1) {
+  width: 25%;
+}
+
+.report-table--wide th:nth-child(2),
+.report-table--wide td:nth-child(2) {
+  width: 25%;
+}
+
+.report-table--compact {
+  min-width: 520px;
+}
+
+.report-table th,
+.report-table td {
+  border: 1px solid #dde1eb;
+  padding: 4px 6px;
+  text-align: center;
+}
+
+.report-table__th {
+  background-color: #eef1fb;
+  font-weight: 600;
+}
+
+.report-table__th--row {
+  background-color: #e3e7fa;
+  text-align: left;
+  min-width: 130px;
+}
+
+.report-table__row-header {
+  background-color: #f3f4fb;
+  text-align: left;
+  font-weight: 500;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.report-table__th--row,
+.report-table__row-header {
+  position: sticky;
+  left: 0;
+}
+
+/* Grand Total */
+
+.report-table__th--grand-total,
+.report-table__td--grand-total {
+  border-left-width: 2px;
+  border-right-width: 2px;
+  border-color: #1e1e24;
+}
+
+/* Псевдо-ссылка-кнопка */
+
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 12px;
+  color: #4c6fff;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.link-button:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Адаптив */
+
+@media (max-width: 900px) {
+  .workspace__grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+            "primary"
+            "secondary1"
+            "secondary2";
+  }
+
+  .report-block {
+    max-width: 100%;
+  }
+}
