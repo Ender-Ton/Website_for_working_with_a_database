@@ -206,15 +206,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Перестройка фильтра "Магазин обучения" с учётом выбранного города
   function rebuildTrainingShopFilterOptions() {
     if (!filterTrainingShopEl || !export1Data.length || !export1ColumnMap) return;
 
     const trainingShopCol = export1ColumnMap.trainingShop;
-    if (!trainingShopCol) return;
+    const cityCol = export1ColumnMap.city;
+    if (!trainingShopCol || !cityCol) return;
 
+    const cityFilter = filterCityEl ? filterCityEl.value : "";
     const valuesSet = new Set();
 
     export1Data.forEach((row) => {
+      const cityVal = String(row[cityCol] ?? "").trim();
+
+      // Фильтрация по выбранному городу
+      if (cityFilter) {
+        if (cityFilter === "Остальные города") {
+          // только те, кто не в списке 15 основных городов
+          if (!cityVal || MAIN_CITIES.includes(cityVal)) return;
+        } else {
+          if (cityVal !== cityFilter) return;
+        }
+      }
+
       const val = row[trainingShopCol];
       if (val === null || val === undefined) return;
       const str = String(val).trim();
@@ -222,8 +237,11 @@ document.addEventListener("DOMContentLoaded", () => {
       valuesSet.add(str);
     });
 
-    const values = Array.from(valuesSet);
-    values.sort((a, b) => a.localeCompare(b, "ru"));
+    const values = Array.from(valuesSet).sort((a, b) =>
+        a.localeCompare(b, "ru")
+    );
+
+    const prevValue = filterTrainingShopEl.value;
 
     filterTrainingShopEl.innerHTML = "";
 
@@ -238,6 +256,17 @@ document.addEventListener("DOMContentLoaded", () => {
       opt.textContent = v;
       filterTrainingShopEl.appendChild(opt);
     });
+
+    // если предыдущий выбор всё ещё доступен — сохраняем его
+    const hasPrev =
+        prevValue &&
+        Array.from(filterTrainingShopEl.options).some(
+            (o) => o.value === prevValue
+        );
+
+    filterTrainingShopEl.value = hasPrev
+        ? prevValue
+        : "Все магазины обучения";
   }
 
   function renderExport1Table() {
@@ -367,6 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // 2-я выгрузка
   function normalizeExport2Row(row) {
     const keys = Object.keys(row);
     if (keys.length < 7) {
@@ -500,8 +530,6 @@ document.addEventListener("DOMContentLoaded", () => {
       tdGT.textContent = grandTotalCol ? (row[grandTotalCol] ?? "") : "";
       tr.appendChild(tdGT);
 
-      // Проходим по фактическим заголовкам-слотам (7 штук),
-      // чтобы количество колонок совпадало с шапкой.
       headerCells.forEach((th) => {
         const idx = parseInt(th.getAttribute("data-slot-index"), 10);
         const colName = slotColumns[idx];
@@ -625,14 +653,32 @@ document.addEventListener("DOMContentLoaded", () => {
     reader.readAsArrayBuffer(file);
   }
 
-  if (filterCityEl) filterCityEl.addEventListener("change", renderExport1Table);
-  if (filterRoleEl) filterRoleEl.addEventListener("change", renderExport1Table);
-  if (filterDateEl) filterDateEl.addEventListener("change", renderExport1Table);
-  if (filterTrainingShopEl) filterTrainingShopEl.addEventListener("change", renderExport1Table);
+  // Перерисовка при смене фильтров 1-й выгрузки
+  if (filterCityEl) {
+    filterCityEl.addEventListener("change", () => {
+      rebuildTrainingShopFilterOptions();
+      renderExport1Table();
+    });
+  }
+  if (filterRoleEl) {
+    filterRoleEl.addEventListener("change", renderExport1Table);
+  }
+  if (filterDateEl) {
+    filterDateEl.addEventListener("change", renderExport1Table);
+  }
+  if (filterTrainingShopEl) {
+    filterTrainingShopEl.addEventListener("change", renderExport1Table);
+  }
 
-  if (filter3CityEl) filter3CityEl.addEventListener("change", renderExport3Table);
-  if (filter3RoleEl) filter3RoleEl.addEventListener("change", renderExport3Table);
+  // Фильтры 3-й выгрузки
+  if (filter3CityEl) {
+    filter3CityEl.addEventListener("change", renderExport3Table);
+  }
+  if (filter3RoleEl) {
+    filter3RoleEl.addEventListener("change", renderExport3Table);
+  }
 
+  // Обновление данных по кнопкам "Обновить данные"
   refreshButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
       const exp = btn.dataset.export;
@@ -646,6 +692,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Обработчики выбора файлов при обновлении
   if (refreshFile1) {
     refreshFile1.addEventListener("change", (e) => {
       const file = e.target.files[0];
@@ -667,6 +714,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Первый заход — чтение файлов после "Продолжить"
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
